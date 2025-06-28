@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="ja" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kazuki Tanaka | PORTFOLIO</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* グローバルスタイル */
+        body {
+            font-family: 'Noto Sans JP', 'Inter', sans-serif;
+            background-color: #050505;
+            color: #E0E0E0;
+            overflow-x: hidden; /* 横スクロールを禁止 */
+            /* ページ全体のスクロールをさせないために追加 */
+            overflow-y: hidden;
+        }
+
+        /* three.js用キャンバス */
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1; /* コンテンツの背面に配置 */
+        }
+
+        /* コンテンツセクションの基本スタイル */
+        .content-section {
+            /* 1画面に収まるように高さを100vhに固定 */
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            padding: 80px 24px; /* 上下のパディングを少し調整 */
+            box-sizing: border-box;
+        }
+
+        /* セクションタイトル */
+        .section-title {
+            font-family: 'Inter', sans-serif;
+            font-weight: 900;
+            font-size: clamp(2.5rem, 10vw, 6rem); /* 可変フォントサイズ */
+            letter-spacing: 0.05em;
+            color: #FFFFFF;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+
+        /* コンテンツの基本スタイル */
+        .content-body {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 1s 0.3s ease-out, transform 1s 0.3s ease-out;
+        }
+        
+        /* 表示されたときのアニメーションクラス */
+        .is-visible .section-title,
+        .is-visible .content-body {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* カード共通スタイル */
+        .glass-card {
+            background-color: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: background-color 0.3s, transform 0.3s;
+            cursor: pointer;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .glass-card:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-5px);
+        }
+        .glass-card-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* SNSアイコン */
+        .social-icon {
+            transition: transform 0.3s ease;
+        }
+        .social-icon:hover {
+            transform: scale(1.1);
+        }
+
+        /* モーダル */
+        #modal-container {
+            transition: opacity 0.3s ease-in-out;
+        }
+        #modal-content {
+            transition: transform 0.3s ease-in-out;
+            transform: scale(0.95);
+        }
+        #modal-container:not(.hidden) #modal-content {
+            transform: scale(1);
+        }
+        .modal-gallery-image {
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 0.5rem;
+        }
+        .booth-link {
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .modal-section-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #FFFFFF;
+            border-bottom: 1px solid #4A5568;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- 背景用キャンバス -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- ヘッダー -->
+    <header class="fixed top-0 left-0 right-0 z-50 p-6 flex justify-between items-center">
+        <a href="#" class="text-xl font-bold tracking-widest text-white">Portfolio</a>
+        <span class="text-gray-400 text-sm hidden sm:block">RTCK / REINA</span>
+    </header>
+
+    <main>
+        <section id="hero" class="content-section h-screen text-center">
+            <div>
+                <h1 class="text-5xl md:text-8xl font-black tracking-widest font-family-inter text-white">KAZUKI TANAKA</h1>
+                <p class="mt-4 text-lg md:text-2xl tracking-wider text-gray-300">3D MODELER</p>
+            </div>
+        </section>
+
+        <section id="about" class="content-section">
+            <div class="container mx-auto px-6 max-w-4xl text-center">
+                <h2 class="section-title mb-12">ABOUT</h2>
+                <div class="content-body">
+                     <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/VRChat_2024-01-01_00-51-09.058_2160x3840.png" alt="アバターアイコン" class="w-32 h-32 rounded-full mx-auto mb-8 border-2 border-gray-700 object-cover">
+                    <div class="text-lg leading-relaxed max-w-2xl mx-auto">
+                        <p>
+                            愛知県岡崎市在住。3D CADモデラー。<br>
+                            常に新しい技術や素材に触れ、自身のスキルを絶えず進化させることに情熱を燃やす。自分に「できない」があることを許さず、課題を発見した瞬間から解決へのプロセスを描く姿勢こそが、私の原動力である。
+                            <br><br>
+                            <span class="font-bold text-white tracking-wider">"Innovate Or Die"</span>
+                            <br>
+                            <span class="text-sm text-gray-400">- Specialized Bicycles</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="works" class="content-section">
+            <div class="container mx-auto px-6 w-full">
+                <h2 class="section-title text-center mb-8">WORKS</h2>
+                <div class="content-body">
+                    <!-- Google Siteへのリンクボタン -->
+                    <div class="text-center mb-6">
+                        <a href="https://www.rtck-reina.com/" target="_blank" rel="noopener noreferrer" class="inline-block bg-white text-black font-bold py-4 px-10 rounded-full hover:bg-gray-300 transition-colors duration-300 text-lg">
+                            より詳細なポートフォリオを見る &rarr;
+                        </a>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div class="glass-card rounded-lg overflow-hidden group p-5 text-center" data-project-id="project1">
+                            <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/basestation%20stand/v3.png" alt="Lighthouse用カスタムマウント" class="w-full h-auto object-cover rounded-md mb-3">
+                            <div class="glass-card-content">
+                                <h3 class="text-xl font-bold">Lighthouse用カスタムマウント</h3>
+                                <p class="text-sm text-gray-400 mt-2">ジェネレーティブデザインを用いたVRトラッキング最適化</p>
+                            </div>
+                        </div>
+                        <div class="glass-card rounded-lg overflow-hidden group p-5 text-center" data-project-id="project2">
+                            <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/GLSL%20VJ/Thumbnail2.png" alt="簡易GLSL VJアプリケーション" class="w-full h-auto object-cover rounded-md mb-3">
+                            <div class="glass-card-content">
+                                <h3 class="text-xl font-bold">簡易GLSL VJアプリケーション</h3>
+                                <p class="text-sm text-gray-400 mt-2">AI協調開発によるライブコーディングVJツール</p>
+                            </div>
+                        </div>
+                        <div class="glass-card rounded-lg overflow-hidden group p-5 text-center" data-project-id="project3">
+                            <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/stool/2_73S5157.png" alt="スライスアップルスツール" class="w-full h-auto object-cover rounded-md mb-3">
+                             <div class="glass-card-content">
+                                <h3 class="text-xl font-bold">スライスアップルスツール</h3>
+                                <p class="text-sm text-gray-400 mt-2">モジュール設計による機能美の探求</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="skills" class="content-section">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="section-title mb-16">SKILLS</h2>
+                <div class="content-body max-w-2xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="glass-card p-8 rounded-lg">
+                        <h3 class="text-2xl font-bold mb-3">3D Modeling</h3>
+                        <p class="text-gray-300 text-lg">Autodesk Fusion</p>
+                    </div>
+                    <div class="glass-card p-8 rounded-lg">
+                        <h3 class="text-2xl font-bold mb-3">Design</h3>
+                        <p class="text-gray-300 text-lg">Affinity Photo 2<br>Adobe Photoshop</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="content-section">
+            <!-- コンテンツとフッターを内包し、レイアウトを調整 -->
+            <div class="container mx-auto px-6 text-center flex flex-col justify-between h-full">
+                <!-- メインコンテンツを中央に配置するためのラッパー -->
+                <div class="flex-grow flex flex-col justify-center">
+                    <h2 class="section-title mb-12">CONTACT</h2>
+                    <div class="content-body">
+                        <p class="text-lg mb-8">お仕事のご依頼、ご相談など、お気軽にご連絡ください。</p>
+                        <a href="mailto:rtck2018@gmail.com" class="inline-block bg-white text-black font-bold py-4 px-10 rounded-full hover:bg-gray-300 transition-colors duration-300 text-lg">
+                            rtck2018@gmail.com
+                        </a>
+                        <div class="flex justify-center space-x-6 mt-10">
+                            <a href="https://x.com/REINA040712" target="_blank" rel="noopener noreferrer" class="social-icon text-gray-400 hover:text-white"><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg></a>
+                            <a href="https://github.com/RTCK-reina" target="_blank" rel="noopener noreferrer" class="social-icon text-gray-400 hover:text-white"><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.168 6.839 9.492.5.092.682-.217.682-.482 0-.237-.009-.868-.014-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.031-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.378.203 2.398.1 2.651.64.7 1.03 1.595 1.03 2.688 0 3.848-2.338 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.001 10.001 0 0022 12c0-5.523-4.477-10-10-10z" clip-rule="evenodd"></path></svg></a>
+                            <a href="https://www.linkedin.com/in/%E4%B8%80%E8%BC%9D-%E7%94%B0%E4%B8%AD-4a7669346/" target="_blank" rel="noopener noreferrer" class="social-icon text-gray-400 hover:text-white"><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"></path></svg></a>
+                        </div>
+                    </div>
+                </div>
+                <!-- フッターをセクションの最後に移動 -->
+                <footer class="py-4 text-center text-gray-500 text-sm">
+                    <p>&copy; 2024 Kazuki Tanaka (RTCK). All Rights Reserved.</p>
+                </footer>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal Container -->
+    <div id="modal-container" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4" style="--tw-bg-opacity: 0.8;">
+        <div id="modal-content" class="bg-gray-900/80 border border-gray-700 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto p-6 md:p-8 relative text-left">
+            <!-- Content will be injected by JavaScript -->
+        </div>
+    </div>
+
+    <script>
+    // --- three.js Particle Background ---
+    let scene, camera, renderer, particles, mouseX = 0, mouseY = 0;
+    let windowHalfX = window.innerWidth / 2;
+    let windowHalfY = window.innerHeight / 2;
+    
+    function initParticles() {
+        scene = new THREE.Scene();
+        camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
+        camera.position.z = 1000;
+        const material = new THREE.PointsMaterial({ color: 0x444444, size: 1.5, blending: THREE.AdditiveBlending, transparent: true, sizeAttenuation: true });
+        const geometry = new THREE.BufferGeometry();
+        const vertices = [];
+        const numParticles = 5000;
+        for (let i = 0; i < numParticles; i++) {
+            const x = Math.random() * 2000 - 1000;
+            const y = Math.random() * 2000 - 1000;
+            const z = Math.random() * 2000 - 1000;
+            vertices.push(x, y, z);
+        }
+        geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+        particles = new THREE.Points(geometry, material);
+        scene.add(particles);
+        const canvas = document.getElementById('particle-canvas');
+        // メインコンテナを取得
+        const mainContainer = document.querySelector('main');
+        renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.addEventListener('mousemove', onDocumentMouseMove, false);
+        window.addEventListener('resize', onWindowResize, false);
+    }
+
+    function onWindowResize() {
+        windowHalfX = window.innerWidth / 2;
+        windowHalfY = window.innerHeight / 2;
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+
+    function onDocumentMouseMove(event) {
+        mouseX = (event.clientX - windowHalfX) / 2;
+        mouseY = (event.clientY - windowHalfY) / 2;
+    }
+
+    function animateParticles() {
+        requestAnimationFrame(animateParticles);
+        renderParticles();
+    }
+
+    function renderParticles() {
+        const time = Date.now() * 0.00005;
+        camera.position.x += (mouseX - camera.position.x) * 0.05;
+        camera.position.y += (-mouseY - camera.position.y) * 0.05;
+        camera.lookAt(scene.position);
+        particles.rotation.x = time * 0.2;
+        particles.rotation.y = time * 0.4;
+        renderer.render(scene, camera);
+    }
+
+    // --- Scroll Animation ---
+    const sections = document.querySelectorAll('.content-section');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+            }
+        });
+    }, { rootMargin: '0px', threshold: 0.2 });
+    sections.forEach(section => { observer.observe(section); });
+
+    // --- Modal Logic ---
+    const workCards = document.querySelectorAll('[data-project-id]');
+    const modalContainer = document.getElementById('modal-container');
+    const modalContent = document.getElementById('modal-content');
+
+    const projectData = {
+        'project1': {
+            title: 'Lighthouseトラッキング最適化マウント',
+            details: `
+                <a href="https://reinac.booth.pm/items/5722247" target="_blank" rel="noopener noreferrer" class="booth-link block mb-6 p-4 bg-pink-500 text-white text-center font-bold rounded-lg hover:bg-pink-600">
+                    設計データをBOOTHで公開中
+                </a>
+                <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/basestation%20stand/v3.png" alt="Lighthouse用カスタムマウント" class="w-full h-auto object-cover rounded-md mb-8">
+                
+                <div class="mb-8 p-4 bg-white/5 rounded-lg space-y-4">
+                  <h3 class="modal-section-title">動機：理想のVR体験への渇望</h3>
+                  <p class="text-gray-300 leading-relaxed">
+                    長年、Lighthouseシステムの高精度なトラッキングは、IMUやインサイドアウト方式では代替不可能な体験を提供してくれました。特にVRChatでの没入感は、このシステムあってこそである。しかし、私の8畳間という限られた空間では、その性能を最大限に引き出すことができずにいた。VIVE公式が推奨する「高さ2m以上、25〜35度の傾斜」という理想と、壁の隅にしか設置できない現実とのギャップ。付属マウントでは角度もフィット感も不十分で、結果としてトラッキングの「ズレ・ロスト」が頻発し、VR体験の没入感を著しく阻害していた。この根源的な課題を解決するため、市販品に頼らず、低予算で理想の角度と設置を実現する金具をゼロから自作する決意をした。
+                  </p>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-8 mb-8">
+                    <div class="p-4 bg-white/5 rounded-lg">
+                        <h3 class="text-xl font-bold mb-3 text-white">使用ツール</h3>
+                        <ul class="list-disc list-inside text-gray-300 space-y-1">
+                            <li><b>3D CAD:</b> Autodesk Fusion</li>
+                            <li><b>スライサー:</b> Ultimaker Cura</li>
+                            <li><b>3Dプリンター:</b> Flashforge Adventurer 3X</li>
+                        </ul>
+                    </div>
+                    <div class="p-4 bg-white/5 rounded-lg">
+                        <h3 class="text-xl font-bold mb-3 text-white">主要な設計手法</h3>
+                        <ul class="list-disc list-inside text-gray-300 space-y-1">
+                            <li>シェイプ最適化</li>
+                            <li>ジェネレーティブデザイン (V3以降)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div>
+                  <h3 class="modal-section-title">プロトタイピングの軌跡</h3>
+                  <div class="space-y-8">
+                    <div>
+                      <h4 class="text-xl font-semibold text-gray-200 mb-3">V0(V1): 力学的最適解の追求と失敗</h4>
+                      <p class="text-sm text-gray-400 mt-2 mb-3"><b>方針:</b> 力学的最適解に重点を置き設計。<b>結果:</b> 高剛性、軽量、低サポート材を達成。<b>課題:</b> しかし、実用性を度外視した結果、取り付けが物理的に不可能な形状となってしまった。</p>
+                      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/basestation%20stand/V1%20cad.png" alt="V0 レンダリング" class="modal-gallery-image">
+                        <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/basestation%20stand/V1%20photo.jpg" alt="V0 実物" class="modal-gallery-image">
+                      </div>
+                    </div>
+                    <div>
+                      <h4 class="text-xl font-semibold text-gray-200 mb-3">V1+: 初の実用化と新たな課題</h4>
+                      <p class="text-sm text-gray-400 mt-2 mb-3"><b>方針:</b> V0の反省から、取り付け可能な形状へと修正。<b>結果:</b> ベースステーションの装着に成功。<b>課題:</b> 剛性が著しく不足し、固定時の歪みが顕著に。2点支持が垂直位置にあることが原因と分析し、片側二点支持への変更を決断。</p>
+                      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/basestation%20stand/V1+%20cad.png" alt="V1+ レンダリング" class="modal-gallery-image">
+                        <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/basestation%20stand/V1+%20photo.jpg" alt="V1+ 実物" class="modal-gallery-image">
+                      </div>
+                    </div>
+                    <div>
+                      <h4 class="text-xl font-semibold text-gray-200 mb-3">V2: 剛性の確保と次なる壁</h4>
+                      <p class="text-sm text-gray-400 mt-2 mb-3"><b>方針:</b> 片側二点支持による剛性向上。<b>結果:</b> 手で破損させることが不可能なほどの高剛性を達成。<b>課題:</b> サポート材の固着が顕著になり、後処理に問題が発生。また、左側のみの固定点では設置の自由度が低いという新たな問題が浮上。</p>
+                      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/basestation%20stand/v2%20cad.png" alt="V2 レンダリング" class="modal-gallery-image">
+                        <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/basestation%20stand/v2%20photo.jpg" alt="V2 実物" class="modal-gallery-image">
+                      </div>
+                    </div>
+                     <div>
+                      <h4 class="text-xl font-semibold text-gray-200 mb-3">V3 & V4: ジェネレーティブデザインと手作業の融合</h4>
+                      <p class="text-sm text-gray-400 mt-2 mb-3"><b>方針:</b> V3ではジェネレーティブデザインを本格導入し、左右対称の2点止めに対応。V4ではその知見を元に手作業で再設計し、サポート材の最小化を目指した。<b>結果:</b> 共に高剛性と優れたデザイン性を両立する設計が完成。<b>課題:</b> フィラメント在庫が尽きたため、印刷と実地検証は休止中。</p>
+                      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/basestation%20stand/v3.png" alt="V3 レンダリング" class="modal-gallery-image">
+                        <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/basestation%20stand/v4.png" alt="V4 レンダリング" class="modal-gallery-image">
+                      </div>
+                    </div>
+                     <div>
+                      <h4 class="text-xl font-semibold text-gray-200 mb-3">スライサー設定</h4>
+                      <p class="text-sm text-gray-400 mt-2 mb-3">プロトタイプ用の速度重視設定。Gyroidパターンのインフィルなどを採用。</p>
+                      <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/basestation%20stand/Slicer.png" alt="スライサーデモ" class="modal-gallery-image">
+                    </div>
+                  </div>
+                </div>
+                 <div class="mt-12 p-4 bg-white/5 rounded-lg">
+                  <h3 class="modal-section-title">総評：学びと今後の展望</h3>
+                  <p class="text-gray-300 leading-relaxed">
+                    本プロジェクトでは、8畳間の狭小空間でもLighthouseの高精度トラッキングを最大限に引き出すため、ゼロから自作マウントを設計・製作しました。特に、初導入したジェネレーティブデザインは、形状の最適化と表面の滑らかさを両立し、設計の可能性を大きく広げてくれました。V1+/V2プロトタイプにより-35°固定と高剛性を確保し、シェイプ最適化やCuraの高速設定で試作サイクルを強化できたことは大きな成果です。今後はフィラメントを補充しV3・V4を評価、この知見を他のVRアクセサリ設計にも応用し、狭小空間でVRを追求するコミュニティに貢献したいと考えている。
+                  </p>
+                </div>
+            `
+        },
+        'project2': {
+            title: '簡易GLSL VJアプリケーション',
+            details: `
+                <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/GLSL%20VJ/Thumbnail2.png" alt="GLSL VJ App UI" class="w-full h-auto object-cover rounded-md mb-8">
+                
+                <div class="mb-8 p-4 bg-white/5 rounded-lg space-y-4">
+                  <h3 class="modal-section-title">コンセプト：AIとの「共創」によるVJツールのプロトタイピング</h3>
+                  <p class="text-gray-300 leading-relaxed">
+                    本作は、GLSLシェーダーをライブコーディング形式で操作することもでき、インタラクティブかつリアルタイムな映像演出を実現するマルチレイヤーVJ Webアプリケーションである。その核心は、コーディング初心者である私が、開発支援AI（Gemini 2.5 Pro）との対話のみで、約10時間という短期間で構築した実験的作品であるという点にある。これは単なるツール開発ではなく、人間とAIの協調による新しい開発パラダイムを探る試みである。
+                  </p>
+                </div>
+
+                <div class="mb-8 p-4 bg-white/5 rounded-lg space-y-4">
+                    <h3 class="modal-section-title">開発プロセス：AIを「クリエイティブパートナー」として扱った協働設計</h3>
+                    <p class="text-gray-300 leading-relaxed">
+                    本開発はVS Code等のIDEを一切使用せず、純粋なチャットベースで進行した。
+                    </p>
+                    <ul class="list-disc list-inside text-gray-300 space-y-2 pl-4">
+                        <li><b>対話的プロトタイピング:</b> UI設計から機能実装まで、AIへの逐次的な指示とフィードバックの応酬で試行錯誤を繰り返した。</li>
+                        <li><b>エラー駆動開発:</b> 発生したエラーを即座にAIに投げ返し、修正案を提示させることで、対話のみでのデバッグを行った。</li>
+                        <li><b>諦めのマネジメント:</b> AIが特定の問題解決に固執しループ状態に陥った際、固執せずに発想を転換し、別のアプローチで代替させる柔軟な問題解決を実践した。</li>
+                        <li><b>創造的フィードバック:</b> 映像の質感といった主観的な要素について、「もっとキラキラさせて」「よりサイケデリックに」といった抽象的な対話を通じてエフェクトを改善。AIを単なる命令実行者ではなく、創造的パートナーとして扱った。</li>
+                        <li><b>セッションリセット戦略:</b> 応答品質が低下した際、チャットスペースをリセットすることでAIの「コンテキスト疲労」を解消。AIのコンディション管理も、開発者としての重要なスキルであることを学んだ。</li>
+                    </ul>
+                </div>
+                
+                <div class="mb-8">
+                    <h3 class="modal-section-title">主な機能と技術スタック</h3>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h4 class="text-xl font-semibold text-gray-200 mb-3">機能一覧</h4>
+                            <ul class="list-disc list-inside text-gray-300 space-y-2">
+                                <li>AfterEffects的なレイヤー合成とブレンド制御</li>
+                                <li>多数のGLSLプリセットシェーダー（映像生成・フィルター）</li>
+                                <li>即時反映されるGLSLライブコーディング環境</li>
+                                <li>シーン・シーケンス管理（BPM設定対応）</li>
+                                <li>JSONによるデータのエクスポート／インポート</li>
+                                <li>VJパフォーマンス用の独立した全画面出力ウィンドウ</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-semibold text-gray-200 mb-3">使用技術</h4>
+                             <ul class="list-disc list-inside text-gray-300 space-y-2">
+                                <li>GLSL + Three.js</li>
+                                <li>Tailwind CSS</li>
+                                <li>SortableJS (D&D操作)</li>
+                                <li>Gemini 2.5 Pro (総合開発支援)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                  <h3 class="modal-section-title">スクリーンショット</h3>
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/GLSL%20VJ/start%20up%20window.png" alt="起動画面" class="modal-gallery-image">
+                    <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/GLSL%20VJ/Operation%20Console.png" alt="操作コンソール" class="modal-gallery-image">
+                    <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/GLSL%20VJ/Shader%20selection%20screen.png" alt="シェーダー選択画面" class="modal-gallery-image">
+                    <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/GLSL%20VJ/Original%20code%20can%20also%20be%20entered.png" alt="オリジナルコード入力" class="modal-gallery-image">
+                    <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/GLSL%20VJ/You%20can%20change%20the%20chord%20after%20inputting%20it,%20and%20you%20can%20also%20change%20the%20preset%20chord..png" alt="コード変更画面" class="modal-gallery-image">
+                  </div>
+                </div>
+                
+                <div class="mt-12 p-4 bg-white/5 rounded-lg">
+                  <h3 class="modal-section-title">総評：AI時代のクリエイティブエンジニアリング</h3>
+                  <p class="text-gray-300 leading-relaxed">
+                    このプロジェクトは、単なる技術実装を超え、AIと共に何が可能かを探る「共創」の実験であった。技術的習熟度のみに依存しない、柔軟な対話力・構想力・問題解決力を武器に、今後もAI時代にふさわしいクリエイティブエンジニアとして進化していきたいと考えている。
+                  </p>
+                </div>
+            `
+        },
+        'project3': {
+            title: 'スライスアップルスツール',
+            details: `
+                <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/stool/_73S5157.jpg" alt="スライスアップルスツール 3Dモデル" class="w-full h-auto object-cover rounded-md mb-8">
+
+                <div class="mb-8 p-4 bg-white/5 rounded-lg space-y-4">
+                  <h3 class="modal-section-title">コンセプト：制約から生まれる機能美</h3>
+                  <p class="text-gray-300 leading-relaxed">
+                    スツールとは、背もたれと肘掛けのない簡易的な椅子であり、その本質は座り心地よりも機能性、すなわち「持ち運びやすさ」と「収納性」にある。このプロジェクトでは、その本質を突き詰めるため、「すべての基本形状を統一する」という極めて厳しい自己制約を課した。この制約が、逆に創造の出発点となった。
+                  </p>
+                </div>
+
+                <div class="mb-8 p-4 bg-white/5 rounded-lg space-y-4">
+                    <h3 class="modal-section-title">設計と思考のプロセス</h3>
+                    <p class="text-gray-300 leading-relaxed">
+                    試行錯誤の末、リンゴをスライスした断面という有機的な形状をモチーフとすることに決定。これにより、モジュールを組み合わせることでスツールとして成立し、分解すればコンパクトに収納できるという、機能とデザインの両立を目指した。
+                    </p>
+                     <ul class="list-disc list-inside text-gray-300 space-y-2 pl-4">
+                        <li><b>モジュール設計:</b> ほぼ同一形状のモジュールで構成することで、分解・組立が容易になり、部品紛失のリスクを低減。</li>
+                        <li><b>軽量化と剛性:</b> Autodesk Fusionのシェイプ最適化シミュレーションを参考に、天板と脚部に効果的な肉抜きを施した。これにより、全体で29%、特に負荷のかかる脚部では40%という大幅な軽量化を実現しつつ、スツールとしての耐荷重性能を確保した。</li>
+                        <li><b>機能的ディテール:</b> 接地面を広げることで転倒を防止する脚部の形状や、軽量化のための肉抜き穴を「軽い取っ手」としても使えるようにするなど、複数の機能を一つの形状に集約。さらに、リンゴのヘタを模した部分は、小物を掛けられる「虫の頭」のようなフックとしての遊び心も加えている。</li>
+                    </ul>
+                </div>
+                
+                <div>
+                  <h3 class="modal-section-title">設計図と構造解析</h3>
+                  <div class="space-y-8">
+                    <div>
+                      <h4 class="text-xl font-semibold text-gray-200 mb-3">モジュール構成</h4>
+                      <p class="text-sm text-gray-400 mt-2 mb-3">全てのモジュールを重ね合わせた状態。分解・組立の容易さを示している。</p>
+                      <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/stool/image7.png" alt="モジュール構成" class="modal-gallery-image">
+                    </div>
+                    <div>
+                      <h4 class="text-xl font-semibold text-gray-200 mb-3">構造解析と設計</h4>
+                      <p class="text-sm text-gray-400 mt-2 mb-3">Fusion でのシェイプ最適化シミュレーションと最終的な設計データを重ね合わせた画像。合理的な肉抜きを実現しました。</p>
+                      <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/stool/structural%20analysis.png" alt="構造解析" class="modal-gallery-image">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mt-12 p-4 bg-white/5 rounded-lg">
+                  <h3 class="modal-section-title">自己評価と今後の課題</h3>
+                  <p class="text-gray-300 leading-relaxed">
+                    設計の根幹である「モジュール統一」という目標は達成できたが、天板の肉抜きデザインの美的な洗練度や、軽量化と引き換えに犠牲となった「捻り」への耐性など、改善点は存在する。このプロジェクトは、制約こそが創造の母であり、デザインとはトレードオフの関係性の中で最適解を探求することであると、改めて私に教えてくれた。
+                  </p>
+                </div>
+            `
+        }
+    };
+
+    function openModal(projectId) {
+        const data = projectData[projectId];
+        if (!data) return;
+
+        modalContent.innerHTML = `
+            <button id="modal-close-button" class="absolute top-4 right-4 text-gray-400 hover:text-white text-3xl leading-none z-10">&times;</button>
+            <h2 class="text-3xl md:text-4xl font-black mb-4 text-white pr-8">${data.title}</h2>
+            <div>${data.details}</div>
+        `;
+        modalContainer.classList.remove('hidden');
+        modalContainer.classList.add('flex');
+        document.body.style.overflow = 'hidden'; // モーダル表示中は背景のスクロールを止める
+
+        document.getElementById('modal-close-button').addEventListener('click', closeModal);
+    }
+
+    function closeModal() {
+        modalContainer.classList.add('hidden');
+        modalContainer.classList.remove('flex');
+        document.body.style.overflow = 'hidden'; // フルページスクロールのためhiddenを維持
+    }
+
+    workCards.forEach(card => {
+        card.addEventListener('click', () => {
+            openModal(card.dataset.projectId);
+        });
+    });
+
+    modalContainer.addEventListener('click', (e) => {
+        if (e.target === modalContainer) {
+            closeModal();
+        }
+    });
+    
+    // --- フルページスクロール ここから ---
+    const scrollableSections = document.querySelectorAll('main > section');
+    let currentSectionIndex = 0;
+    let isScrolling = false;
+    const scrollThreshold = 1000; // スクロール間の待機時間 (ms)
+
+    function
+ 
+    scrollToSectionByIndex(index) {
+        if (index >= 0 && index < scrollableSections.length) {
+            scrollableSections[index].scrollIntoView({ behavior: 'smooth' });
+            currentSectionIndex = index;
+        }
+    }
+
+    function handleScroll(event) {
+        // モーダル表示中はページスクロールを無効化
+        if (!modalContainer.classList.contains('hidden')) {
+            return;
+        }
+        // デフォルトのスクロール挙動をキャンセル
+        event.preventDefault();
+        
+        if (isScrolling) return;
+
+        isScrolling = true;
+
+        const scrollDirection = event.deltaY;
+
+        if (scrollDirection > 0) {
+            // 下へスクロール
+            if (currentSectionIndex < scrollableSections.length - 1) {
+                currentSectionIndex++;
+                scrollToSectionByIndex(currentSectionIndex);
+            }
+        } else {
+            // 上へスクロール
+            if (currentSectionIndex > 0) {
+                currentSectionIndex--;
+                scrollToSectionByIndex(currentSectionIndex);
+            }
+        }
+        
+        setTimeout(() => {
+            isScrolling = false;
+        }, scrollThreshold);
+    }
+    
+    // マウスホイールイベントにリスナーを追加
+    window.addEventListener('wheel', handleScroll, { passive: false });
+
+    // キーボード操作（上下矢印）の対応
+    window.addEventListener('keydown', (event) => {
+        if (!modalContainer.classList.contains('hidden') || isScrolling) return;
+
+        if (event.key === 'ArrowDown') {
+            event.preventDefault();
+            if (currentSectionIndex < scrollableSections.length - 1) {
+                isScrolling = true;
+                currentSectionIndex++;
+                scrollToSectionByIndex(currentSectionIndex);
+                setTimeout(() => { isScrolling = false; }, scrollThreshold);
+            }
+        } else if (event.key === 'ArrowUp') {
+            event.preventDefault();
+            if (currentSectionIndex > 0) {
+                isScrolling = true;
+                currentSectionIndex--;
+                scrollToSectionByIndex(currentSectionIndex);
+                setTimeout(() => { isScrolling = false; }, scrollThreshold);
+            }
+        }
+    });
+    // --- フルページスクロール ここまで ---
+
+
+    // --- 初期化 ---
+    window.onload = function() {
+        initParticles();
+        animateParticles();
+    };
+
+    </script>
+</body>
+</html>
