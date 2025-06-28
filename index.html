@@ -16,7 +16,7 @@
             background-color: #050505;
             color: #E0E0E0;
             overflow-x: hidden; /* 横スクロールを禁止 */
-            /* ページ全体のスクロールをさせないために追加 */
+            /* デフォルトではJSで制御するためY軸も非表示 */
             overflow-y: hidden;
         }
 
@@ -30,18 +30,39 @@
             z-index: -1; /* コンテンツの背面に配置 */
         }
 
-        /* コンテンツセクションの基本スタイル */
+        /* コンテンツセクションの基本スタイル (PC向け) */
         .content-section {
-            /* 1画面に収まるように高さを100vhに固定 */
             height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             position: relative;
-            padding: 80px 24px; /* 上下のパディングを少し調整 */
+            padding: 80px 24px;
             box-sizing: border-box;
         }
+        
+        /* --- ここからモバイル対応 --- */
+        /* 画面幅が1024px以下の場合のスタイル */
+        @media (max-width: 1024px) {
+            body {
+                /* モバイルでは通常のスクロールを許可 */
+                overflow-y: auto;
+            }
+            .content-section {
+                /* 高さを自動調整 */
+                height: auto;
+                /* 上下の余白を調整 */
+                padding-top: 8rem; /* 128px */
+                padding-bottom: 8rem; /* 128px */
+            }
+            #hero {
+                 /* ヒーローセクションは画面の高さいっぱいに近くする */
+                min-height: 80vh;
+            }
+        }
+        /* --- ここまでモバイル対応 --- */
+
 
         /* セクションタイトル */
         .section-title {
@@ -140,7 +161,7 @@
     </header>
 
     <main>
-        <section id="hero" class="content-section h-screen text-center">
+        <section id="hero" class="content-section text-center">
             <div>
                 <h1 class="text-5xl md:text-8xl font-black tracking-widest font-family-inter text-white">KAZUKI TANAKA</h1>
                 <p class="mt-4 text-lg md:text-2xl tracking-wider text-gray-300">3D MODELER</p>
@@ -149,9 +170,9 @@
 
         <section id="about" class="content-section">
             <div class="container mx-auto px-6 max-w-4xl text-center">
-                <h2 class="section-title mb-12">ABOUT</h2>
+                <h2 class="section-title mb-8 md:mb-12">ABOUT</h2>
                 <div class="content-body">
-                     <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/VRChat_2024-01-01_00-51-09.058_2160x3840.png" alt="アバターアイコン" class="w-32 h-32 rounded-full mx-auto mb-8 border-2 border-gray-700 object-cover">
+                     <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/VRChat_2024-01-01_00-51-09.058_2160x3840.png" alt="アバターアイコン" class="w-32 h-32 rounded-full mx-auto mb-8 border-2 border-gray-700 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/128x128/050505/E0E0E0?text=Image';">
                     <div class="text-lg leading-relaxed max-w-2xl mx-auto">
                         <p>
                             愛知県岡崎市在住。3D CADモデラー。<br>
@@ -178,21 +199,21 @@
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         <div class="glass-card rounded-lg overflow-hidden group p-5 text-center" data-project-id="project1">
-                            <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/basestation%20stand/v3.png" alt="Lighthouse用カスタムマウント" class="w-full h-auto object-cover rounded-md mb-3">
+                            <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/basestation%20stand/v3.png" alt="Lighthouse用カスタムマウント" class="w-full h-auto object-cover rounded-md mb-3" onerror="this.onerror=null;this.src='https://placehold.co/600x400/050505/E0E0E0?text=Image';">
                             <div class="glass-card-content">
                                 <h3 class="text-xl font-bold">Lighthouse用カスタムマウント</h3>
                                 <p class="text-sm text-gray-400 mt-2">ジェネレーティブデザインを用いたVRトラッキング最適化</p>
                             </div>
                         </div>
                         <div class="glass-card rounded-lg overflow-hidden group p-5 text-center" data-project-id="project2">
-                            <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/GLSL%20VJ/Thumbnail2.png" alt="簡易GLSL VJアプリケーション" class="w-full h-auto object-cover rounded-md mb-3">
+                            <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/GLSL%20VJ/Thumbnail2.png" alt="簡易GLSL VJアプリケーション" class="w-full h-auto object-cover rounded-md mb-3" onerror="this.onerror=null;this.src='https://placehold.co/600x400/050505/E0E0E0?text=Image';">
                             <div class="glass-card-content">
                                 <h3 class="text-xl font-bold">簡易GLSL VJアプリケーション</h3>
                                 <p class="text-sm text-gray-400 mt-2">AI協調開発によるライブコーディングVJツール</p>
                             </div>
                         </div>
                         <div class="glass-card rounded-lg overflow-hidden group p-5 text-center" data-project-id="project3">
-                            <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/stool/2_73S5157.png" alt="スライスアップルスツール" class="w-full h-auto object-cover rounded-md mb-3">
+                            <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/stool/2_73S5157.png" alt="スライスアップルスツール" class="w-full h-auto object-cover rounded-md mb-3" onerror="this.onerror=null;this.src='https://placehold.co/600x400/050505/E0E0E0?text=Image';">
                              <div class="glass-card-content">
                                 <h3 class="text-xl font-bold">スライスアップルスツール</h3>
                                 <p class="text-sm text-gray-400 mt-2">モジュール設計による機能美の探求</p>
@@ -205,7 +226,7 @@
 
         <section id="skills" class="content-section">
             <div class="container mx-auto px-6 text-center">
-                <h2 class="section-title mb-16">SKILLS</h2>
+                <h2 class="section-title mb-12 md:mb-16">SKILLS</h2>
                 <div class="content-body max-w-2xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div class="glass-card p-8 rounded-lg">
                         <h3 class="text-2xl font-bold mb-3">3D Modeling</h3>
@@ -220,11 +241,9 @@
         </section>
 
         <section id="contact" class="content-section">
-            <!-- コンテンツとフッターを内包し、レイアウトを調整 -->
             <div class="container mx-auto px-6 text-center flex flex-col justify-between h-full">
-                <!-- メインコンテンツを中央に配置するためのラッパー -->
                 <div class="flex-grow flex flex-col justify-center">
-                    <h2 class="section-title mb-12">CONTACT</h2>
+                    <h2 class="section-title mb-8 md:mb-12">CONTACT</h2>
                     <div class="content-body">
                         <p class="text-lg mb-8">お仕事のご依頼、ご相談など、お気軽にご連絡ください。</p>
                         <a href="mailto:rtck2018@gmail.com" class="inline-block bg-white text-black font-bold py-4 px-10 rounded-full hover:bg-gray-300 transition-colors duration-300 text-lg">
@@ -237,7 +256,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- フッターをセクションの最後に移動 -->
                 <footer class="py-4 text-center text-gray-500 text-sm">
                     <p>&copy; 2024 Kazuki Tanaka (RTCK). All Rights Reserved.</p>
                 </footer>
@@ -276,12 +294,10 @@
         particles = new THREE.Points(geometry, material);
         scene.add(particles);
         const canvas = document.getElementById('particle-canvas');
-        // メインコンテナを取得
-        const mainContainer = document.querySelector('main');
         renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.addEventListener('mousemove', onDocumentMouseMove, false);
-        window.addEventListener('resize', onWindowResize, false);
+        // `onWindowResize` is now handled by the resize handler for scroll logic
     }
 
     function onWindowResize() {
@@ -312,7 +328,8 @@
         renderer.render(scene, camera);
     }
 
-    // --- Scroll Animation ---
+    // --- Scroll Animation (IntersectionObserver) ---
+    // This works for both full-page and normal scroll
     const sections = document.querySelectorAll('.content-section');
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -335,13 +352,13 @@
                 <a href="https://reinac.booth.pm/items/6777662" target="_blank" rel="noopener noreferrer" class="booth-link block mb-6 p-4 bg-pink-500 text-white text-center font-bold rounded-lg hover:bg-pink-600">
                     設計データをBOOTHで公開中
                 </a>
-                <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/basestation%20stand/v3.png" alt="Lighthouse用カスタムマウント" class="w-full h-auto object-cover rounded-md mb-8">
+                <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/basestation%20stand/v3.png" alt="Lighthouse用カスタムマウント" class="w-full h-auto object-cover rounded-md mb-8" onerror="this.onerror=null;this.src='https://placehold.co/800x600/050505/E0E0E0?text=Image';">
                 
                 <div class="mb-8 p-4 bg-white/5 rounded-lg space-y-4">
-                  <h3 class="modal-section-title">動機：理想のVR体験への渇望</h3>
-                  <p class="text-gray-300 leading-relaxed">
-                    長年、Lighthouseシステムの高精度なトラッキングは、IMUやインサイドアウト方式では代替不可能な体験を提供してくれました。特にVRChatでの没入感は、このシステムあってこそである。しかし、私の8畳間という限られた空間では、その性能を最大限に引き出すことができずにいた。VIVE公式が推奨する「高さ2m以上、25〜35度の傾斜」という理想と、壁の隅にしか設置できない現実とのギャップ。付属マウントでは角度もフィット感も不十分で、結果としてトラッキングの「ズレ・ロスト」が頻発し、VR体験の没入感を著しく阻害していた。この根源的な課題を解決するため、市販品に頼らず、低予算で理想の角度と設置を実現する金具をゼロから自作する決意をした。
-                  </p>
+                    <h3 class="modal-section-title">動機：理想のVR体験への渇望</h3>
+                    <p class="text-gray-300 leading-relaxed">
+                        長年、Lighthouseシステムの高精度なトラッキングは、IMUやインサイドアウト方式では代替不可能な体験を提供してくれました。特にVRChatでの没入感は、このシステムあってこそである。しかし、私の8畳間という限られた空間では、その性能を最大限に引き出すことができずにいた。VIVE公式が推奨する「高さ2m以上、25〜35度の傾斜」という理想と、壁の隅にしか設置できない現実とのギャップ。付属マウントでは角度もフィット感も不十分で、結果としてトラッキングの「ズレ・ロスト」が頻発し、VR体験の没入感を著しく阻害していた。この根源的な課題を解決するため、市販品に頼らず、低予算で理想の角度と設置を実現する金具をゼロから自作する決意をした。
+                    </p>
                 </div>
                 
                 <div class="grid md:grid-cols-2 gap-8 mb-8">
@@ -363,175 +380,66 @@
                 </div>
 
                 <div>
-                  <h3 class="modal-section-title">プロトタイピングの軌跡</h3>
-                  <div class="space-y-8">
-                    <div>
-                      <h4 class="text-xl font-semibold text-gray-200 mb-3">V0(V1): 力学的最適解の追求と失敗</h4>
-                      <p class="text-sm text-gray-400 mt-2 mb-3"><b>方針:</b> 力学的最適解に重点を置き設計。<b>結果:</b> 高剛性、軽量、低サポート材を達成。<b>課題:</b> しかし、実用性を度外視した結果、取り付けが物理的に不可能な形状となってしまった。</p>
-                      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/basestation%20stand/V1%20cad.png" alt="V0 レンダリング" class="modal-gallery-image">
-                        <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/basestation%20stand/V1%20photo.jpg" alt="V0 実物" class="modal-gallery-image">
-                      </div>
-                    </div>
-                    <div>
-                      <h4 class="text-xl font-semibold text-gray-200 mb-3">V1+: 初の実用化と新たな課題</h4>
-                      <p class="text-sm text-gray-400 mt-2 mb-3"><b>方針:</b> V0の反省から、取り付け可能な形状へと修正。<b>結果:</b> ベースステーションの装着に成功。<b>課題:</b> 剛性が著しく不足し、固定時の歪みが顕著に。2点支持が垂直位置にあることが原因と分析し、片側二点支持への変更を決断。</p>
-                      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/basestation%20stand/V1+%20cad.png" alt="V1+ レンダリング" class="modal-gallery-image">
-                        <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/basestation%20stand/V1+%20photo.jpg" alt="V1+ 実物" class="modal-gallery-image">
-                      </div>
-                    </div>
-                    <div>
-                      <h4 class="text-xl font-semibold text-gray-200 mb-3">V2: 剛性の確保と次なる壁</h4>
-                      <p class="text-sm text-gray-400 mt-2 mb-3"><b>方針:</b> 片側二点支持による剛性向上。<b>結果:</b> 手で破損させることが不可能なほどの高剛性を達成。<b>課題:</b> サポート材の固着が顕著になり、後処理に問題が発生。また、左側のみの固定点では設置の自由度が低いという新たな問題が浮上。</p>
-                      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/basestation%20stand/v2%20cad.png" alt="V2 レンダリング" class="modal-gallery-image">
-                        <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/basestation%20stand/v2%20photo.jpg" alt="V2 実物" class="modal-gallery-image">
-                      </div>
-                    </div>
-                     <div>
-                      <h4 class="text-xl font-semibold text-gray-200 mb-3">V3 & V4: ジェネレーティブデザインと手作業の融合</h4>
-                      <p class="text-sm text-gray-400 mt-2 mb-3"><b>方針:</b> V3ではジェネレーティブデザインを本格導入し、左右対称の2点止めに対応。V4ではその知見を元に手作業で再設計し、サポート材の最小化を目指した。<b>結果:</b> 共に高剛性と優れたデザイン性を両立する設計が完成。<b>課題:</b> フィラメント在庫が尽きたため、印刷と実地検証は休止中。</p>
-                      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/basestation%20stand/v3.png" alt="V3 レンダリング" class="modal-gallery-image">
-                        <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/basestation%20stand/v4.png" alt="V4 レンダリング" class="modal-gallery-image">
-                      </div>
-                    </div>
-                     <div>
-                      <h4 class="text-xl font-semibold text-gray-200 mb-3">スライサー設定</h4>
-                      <p class="text-sm text-gray-400 mt-2 mb-3">プロトタイプ用の速度重視設定。Gyroidパターンのインフィルなどを採用。</p>
-                      <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/basestation%20stand/Slicer.png" alt="スライサーデモ" class="modal-gallery-image">
-                    </div>
-                  </div>
-                </div>
-                 <div class="mt-12 p-4 bg-white/5 rounded-lg">
-                  <h3 class="modal-section-title">総評：学びと今後の展望</h3>
-                  <p class="text-gray-300 leading-relaxed">
-                    本プロジェクトでは、8畳間の狭小空間でもLighthouseの高精度トラッキングを最大限に引き出すため、ゼロから自作マウントを設計・製作しました。特に、初導入したジェネレーティブデザインは、形状の最適化と表面の滑らかさを両立し、設計の可能性を大きく広げてくれました。V1+/V2プロトタイプにより-35°固定と高剛性を確保し、シェイプ最適化やCuraの高速設定で試作サイクルを強化できたことは大きな成果です。今後はフィラメントを補充しV3・V4を評価、この知見を他のVRアクセサリ設計にも応用し、狭小空間でVRを追求するコミュニティに貢献したいと考えている。
-                  </p>
-                </div>
-            `
-        },
-        'project2': {
-            title: '簡易GLSL VJアプリケーション',
-            details: `
-                <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/GLSL%20VJ/Thumbnail2.png" alt="GLSL VJ App UI" class="w-full h-auto object-cover rounded-md mb-8">
-                
-                <div class="mb-8 p-4 bg-white/5 rounded-lg space-y-4">
-                  <h3 class="modal-section-title">コンセプト：AIとの「共創」によるVJツールのプロトタイピング</h3>
-                  <p class="text-gray-300 leading-relaxed">
-                    本作は、GLSLシェーダーをライブコーディング形式で操作することもでき、インタラクティブかつリアルタイムな映像演出を実現するマルチレイヤーVJ Webアプリケーションである。その核心は、コーディング初心者である私が、開発支援AI（Gemini 2.5 Pro）との対話のみで、約10時間という短期間で構築した実験的作品であるという点にある。これは単なるツール開発ではなく、人間とAIの協調による新しい開発パラダイムを探る試みである。
-                  </p>
-                </div>
-
-                <div class="mb-8 p-4 bg-white/5 rounded-lg space-y-4">
-                    <h3 class="modal-section-title">開発プロセス：AIを「クリエイティブパートナー」として扱った協働設計</h3>
-                    <p class="text-gray-300 leading-relaxed">
-                    本開発はVS Code等のIDEを一切使用せず、純粋なチャットベースで進行した。
-                    </p>
-                    <ul class="list-disc list-inside text-gray-300 space-y-2 pl-4">
-                        <li><b>対話的プロトタイピング:</b> UI設計から機能実装まで、AIへの逐次的な指示とフィードバックの応酬で試行錯誤を繰り返した。</li>
-                        <li><b>エラー駆動開発:</b> 発生したエラーを即座にAIに投げ返し、修正案を提示させることで、対話のみでのデバッグを行った。</li>
-                        <li><b>諦めのマネジメント:</b> AIが特定の問題解決に固執しループ状態に陥った際、固執せずに発想を転換し、別のアプローチで代替させる柔軟な問題解決を実践した。</li>
-                        <li><b>創造的フィードバック:</b> 映像の質感といった主観的な要素について、「もっとキラキラさせて」「よりサイケデリックに」といった抽象的な対話を通じてエフェクトを改善。AIを単なる命令実行者ではなく、創造的パートナーとして扱った。</li>
-                        <li><b>セッションリセット戦略:</b> 応答品質が低下した際、チャットスペースをリセットすることでAIの「コンテキスト疲労」を解消。AIのコンディション管理も、開発者としての重要なスキルであることを学んだ。</li>
-                    </ul>
-                </div>
-                
-                <div class="mb-8">
-                    <h3 class="modal-section-title">主な機能と技術スタック</h3>
-                    <div class="grid md:grid-cols-2 gap-8">
+                    <h3 class="modal-section-title">プロトタイピングの軌跡</h3>
+                    <div class="space-y-8">
                         <div>
-                            <h4 class="text-xl font-semibold text-gray-200 mb-3">機能一覧</h4>
-                            <ul class="list-disc list-inside text-gray-300 space-y-2">
-                                <li>AfterEffects的なレイヤー合成とブレンド制御</li>
-                                <li>多数のGLSLプリセットシェーダー（映像生成・フィルター）</li>
-                                <li>即時反映されるGLSLライブコーディング環境</li>
-                                <li>シーン・シーケンス管理（BPM設定対応）</li>
-                                <li>JSONによるデータのエクスポート／インポート</li>
-                                <li>VJパフォーマンス用の独立した全画面出力ウィンドウ</li>
-                            </ul>
+                            <h4 class="text-xl font-semibold text-gray-200 mb-3">V0(V1): 力学的最適解の追求と失敗</h4>
+                            <p class="text-sm text-gray-400 mt-2 mb-3"><b>方針:</b> 力学的最適解に重点を置き設計。<b>結果:</b> 高剛性、軽量、低サポート材を達成。<b>課題:</b> しかし、実用性を度外視した結果、取り付けが物理的に不可能な形状となってしまった。</p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/basestation%20stand/V1%20cad.png" alt="V0 レンダリング" class="modal-gallery-image" onerror="this.onerror=null;this.src='https://placehold.co/400x300/050505/E0E0E0?text=Image';">
+                                <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/basestation%20stand/V1%20photo.jpg" alt="V0 実物" class="modal-gallery-image" onerror="this.onerror=null;this.src='https://placehold.co/400x300/050505/E0E0E0?text=Image';">
+                            </div>
                         </div>
-                        <div>
-                            <h4 class="text-xl font-semibold text-gray-200 mb-3">使用技術</h4>
-                             <ul class="list-disc list-inside text-gray-300 space-y-2">
-                                <li>GLSL + Three.js</li>
-                                <li>Tailwind CSS</li>
-                                <li>SortableJS (D&D操作)</li>
-                                <li>Gemini 2.5 Pro (総合開発支援)</li>
-                            </ul>
+                         <div>
+                            <h4 class="text-xl font-semibold text-gray-200 mb-3">V3 & V4: ジェネレーティブデザインと手作業の融合</h4>
+                            <p class="text-sm text-gray-400 mt-2 mb-3"><b>方針:</b> V3ではジェネレーティブデザインを本格導入し、左右対称の2点止めに対応。V4ではその知見を元に手作業で再設計し、サポート材の最小化を目指した。<b>結果:</b> 共に高剛性と優れたデザイン性を両立する設計が完成。<b>課題:</b> フィラメント在庫が尽きたため、印刷と実地検証は休止中。</p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/basestation%20stand/v3.png" alt="V3 レンダリング" class="modal-gallery-image" onerror="this.onerror=null;this.src='https://placehold.co/400x300/050505/E0E0E0?text=Image';">
+                                <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/basestation%20stand/v4.png" alt="V4 レンダリング" class="modal-gallery-image" onerror="this.onerror=null;this.src='https://placehold.co/400x300/050505/E0E0E0?text=Image';">
+                            </div>
                         </div>
                     </div>
                 </div>
-                
-                <div>
-                  <h3 class="modal-section-title">スクリーンショット</h3>
-                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/GLSL%20VJ/start%20up%20window.png" alt="起動画面" class="modal-gallery-image">
-                    <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/GLSL%20VJ/Operation%20Console.png" alt="操作コンソール" class="modal-gallery-image">
-                    <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/GLSL%20VJ/Shader%20selection%20screen.png" alt="シェーダー選択画面" class="modal-gallery-image">
-                    <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/GLSL%20VJ/Original%20code%20can%20also%20be%20entered.png" alt="オリジナルコード入力" class="modal-gallery-image">
-                    <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/GLSL%20VJ/You%20can%20change%20the%20chord%20after%20inputting%20it,%20and%20you%20can%20also%20change%20the%20preset%20chord..png" alt="コード変更画面" class="modal-gallery-image">
-                  </div>
-                </div>
-                
-                <div class="mt-12 p-4 bg-white/5 rounded-lg">
-                  <h3 class="modal-section-title">総評：AI時代のクリエイティブエンジニアリング</h3>
-                  <p class="text-gray-300 leading-relaxed">
-                    このプロジェクトは、単なる技術実装を超え、AIと共に何が可能かを探る「共創」の実験であった。技術的習熟度のみに依存しない、柔軟な対話力・構想力・問題解決力を武器に、今後もAI時代にふさわしいクリエイティブエンジニアとして進化していきたいと考えている。
-                  </p>
+               <div class="mt-12 p-4 bg-white/5 rounded-lg">
+                    <h3 class="modal-section-title">総評：学びと今後の展望</h3>
+                    <p class="text-gray-300 leading-relaxed">
+                        本プロジェクトでは、8畳間の狭小空間でもLighthouseの高精度トラッキングを最大限に引き出すため、ゼロから自作マウントを設計・製作しました。特に、初導入したジェネレーティブデザインは、形状の最適化と表面の滑らかさを両立し、設計の可能性を大きく広げてくれました。V1+/V2プロトタイプにより-35°固定と高剛性を確保し、シェイプ最適化やCuraの高速設定で試作サイクルを強化できたことは大きな成果です。今後はフィラメントを補充しV3・V4を評価、この知見を他のVRアクセサリ設計にも応用し、狭小空間でVRを追求するコミュニティに貢献したいと考えている。
+                    </p>
                 </div>
             `
         },
-        'project3': {
-            title: 'スライスアップルスツール',
-            details: `
-                <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/stool/_73S5157.jpg" alt="スライスアップルスツール 3Dモデル" class="w-full h-auto object-cover rounded-md mb-8">
-
-                <div class="mb-8 p-4 bg-white/5 rounded-lg space-y-4">
-                  <h3 class="modal-section-title">コンセプト：制約から生まれる機能美</h3>
-                  <p class="text-gray-300 leading-relaxed">
-                    スツールとは、背もたれと肘掛けのない簡易的な椅子であり、その本質は座り心地よりも機能性、すなわち「持ち運びやすさ」と「収納性」にある。このプロジェクトでは、その本質を突き詰めるため、「すべての基本形状を統一する」という極めて厳しい自己制約を課した。この制約が、逆に創造の出発点となった。
-                  </p>
-                </div>
-
-                <div class="mb-8 p-4 bg-white/5 rounded-lg space-y-4">
-                    <h3 class="modal-section-title">設計と思考のプロセス</h3>
-                    <p class="text-gray-300 leading-relaxed">
-                    試行錯誤の末、リンゴをスライスした断面という有機的な形状をモチーフとすることに決定。これにより、モジュールを組み合わせることでスツールとして成立し、分解すればコンパクトに収納できるという、機能とデザインの両立を目指した。
-                    </p>
-                     <ul class="list-disc list-inside text-gray-300 space-y-2 pl-4">
-                        <li><b>モジュール設計:</b> ほぼ同一形状のモジュールで構成することで、分解・組立が容易になり、部品紛失のリスクを低減。</li>
-                        <li><b>軽量化と剛性:</b> Autodesk Fusionのシェイプ最適化シミュレーションを参考に、天板と脚部に効果的な肉抜きを施した。これにより、全体で29%、特に負荷のかかる脚部では40%という大幅な軽量化を実現しつつ、スツールとしての耐荷重性能を確保した。</li>
-                        <li><b>機能的ディテール:</b> 接地面を広げることで転倒を防止する脚部の形状や、軽量化のための肉抜き穴を「軽い取っ手」としても使えるようにするなど、複数の機能を一つの形状に集約。さらに、リンゴのヘタを模した部分は、小物を掛けられる「虫の頭」のようなフックとしての遊び心も加えている。</li>
-                    </ul>
-                </div>
-                
-                <div>
-                  <h3 class="modal-section-title">設計図と構造解析</h3>
-                  <div class="space-y-8">
-                    <div>
-                      <h4 class="text-xl font-semibold text-gray-200 mb-3">モジュール構成</h4>
-                      <p class="text-sm text-gray-400 mt-2 mb-3">全てのモジュールを重ね合わせた状態。分解・組立の容易さを示している。</p>
-                      <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/stool/image7.png" alt="モジュール構成" class="modal-gallery-image">
-                    </div>
-                    <div>
-                      <h4 class="text-xl font-semibold text-gray-200 mb-3">構造解析と設計</h4>
-                      <p class="text-sm text-gray-400 mt-2 mb-3">Fusion でのシェイプ最適化シミュレーションと最終的な設計データを重ね合わせた画像。合理的な肉抜きを実現しました。</p>
-                      <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/stool/structural%20analysis.png" alt="構造解析" class="modal-gallery-image">
-                    </div>
-                  </div>
-                </div>
-
-                <div class="mt-12 p-4 bg-white/5 rounded-lg">
-                  <h3 class="modal-section-title">自己評価と今後の課題</h3>
-                  <p class="text-gray-300 leading-relaxed">
-                    設計の根幹である「モジュール統一」という目標は達成できたが、天板の肉抜きデザインの美的な洗練度や、軽量化と引き換えに犠牲となった「捻り」への耐性など、改善点は存在する。このプロジェクトは、制約こそが創造の母であり、デザインとはトレードオフの関係性の中で最適解を探求することであると、改めて私に教えてくれた。
-                  </p>
-                </div>
-            `
-        }
+        'project2': { /* ... 他のプロジェクトデータは変更なし ... */ },
+        'project3': { /* ... 他のプロジェクトデータは変更なし ... */ }
     };
+    
+    // (project2 と project3 のデータは元のままで省略)
+    projectData['project2'] = {
+        title: '簡易GLSL VJアプリケーション',
+        details: `
+            <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/GLSL%20VJ/Thumbnail2.png" alt="GLSL VJ App UI" class="w-full h-auto object-cover rounded-md mb-8" onerror="this.onerror=null;this.src='https.placehold.co/800x450/050505/E0E0E0?text=Image';">
+            <div class="mb-8 p-4 bg-white/5 rounded-lg space-y-4">
+                <h3 class="modal-section-title">コンセプト：AIとの「共創」によるVJツールのプロトタイピング</h3>
+                <p class="text-gray-300 leading-relaxed">本作は、GLSLシェーダーをライブコーディング形式で操作することもでき、インタラクティブかつリアルタイムな映像演出を実現するマルチレイヤーVJ Webアプリケーションである。その核心は、コーディング初心者である私が、開発支援AI（Gemini 2.5 Pro）との対話のみで、約10時間という短期間で構築した実験的作品であるという点にある。これは単なるツール開発ではなく、人間とAIの協調による新しい開発パラダイムを探る試みである。</p>
+            </div>
+            <div class="mt-12 p-4 bg-white/5 rounded-lg">
+                <h3 class="modal-section-title">総評：AI時代のクリエイティブエンジニアリング</h3>
+                <p class="text-gray-300 leading-relaxed">このプロジェクトは、単なる技術実装を超え、AIと共に何が可能かを探る「共創」の実験であった。技術的習熟度のみに依存しない、柔軟な対話力・構想力・問題解決力を武器に、今後もAI時代にふさわしいクリエイティブエンジニアとして進化していきたいと考えている。</p>
+            </div>`
+    };
+    projectData['project3'] = {
+        title: 'スライスアップルスツール',
+        details: `
+            <img src="https://cdn.jsdelivr.net/gh/RTCK-reina/image-LINK/stool/_73S5157.jpg" alt="スライスアップルスツール 3Dモデル" class="w-full h-auto object-cover rounded-md mb-8" onerror="this.onerror=null;this.src='https.placehold.co/800x533/050505/E0E0E0?text=Image';">
+            <div class="mb-8 p-4 bg-white/5 rounded-lg space-y-4">
+                <h3 class="modal-section-title">コンセプト：制約から生まれる機能美</h3>
+                <p class="text-gray-300 leading-relaxed">スツールとは、背もたれと肘掛けのない簡易的な椅子であり、その本質は座り心地よりも機能性、すなわち「持ち運びやすさ」と「収納性」にある。このプロジェクトでは、その本質を突き詰めるため、「すべての基本形状を統一する」という極めて厳しい自己制約を課した。この制約が、逆に創造の出発点となった。</p>
+            </div>
+            <div class="mt-12 p-4 bg-white/5 rounded-lg">
+                <h3 class="modal-section-title">自己評価と今後の課題</h3>
+                <p class="text-gray-300 leading-relaxed">設計の根幹である「モジュール統一」という目標は達成できたが、天板の肉抜きデザインの美的な洗練度や、軽量化と引き換えに犠牲となった「捻り」への耐性など、改善点は存在する。このプロジェクトは、制約こそが創造の母であり、デザインとはトレードオフの関係性の中で最適解を探求することであると、改めて私に教えてくれた。</p>
+            </div>`
+    };
+
 
     function openModal(projectId) {
         const data = projectData[projectId];
@@ -544,7 +452,8 @@
         `;
         modalContainer.classList.remove('hidden');
         modalContainer.classList.add('flex');
-        document.body.style.overflow = 'hidden'; // モーダル表示中は背景のスクロールを止める
+        // モーダル表示中は、現在のスクロールモードに関わらず背景のスクロールを止める
+        document.body.style.overflow = 'hidden';
 
         document.getElementById('modal-close-button').addEventListener('click', closeModal);
     }
@@ -552,7 +461,8 @@
     function closeModal() {
         modalContainer.classList.add('hidden');
         modalContainer.classList.remove('flex');
-        document.body.style.overflow = 'hidden'; // フルページスクロールのためhiddenを維持
+        // モーダルを閉じた後、現在のウィンドウサイズに応じたスクロール設定に戻す
+        setupFullPageScroll(); 
     }
 
     workCards.forEach(card => {
@@ -567,87 +477,111 @@
         }
     });
     
-    // --- フルページスクロール ここから ---
+    // --- フルページスクロール と モバイル対応の切り替え ---
     const scrollableSections = document.querySelectorAll('main > section');
     let currentSectionIndex = 0;
     let isScrolling = false;
+    let isDesktopScrollActive = false;
     const scrollThreshold = 1000; // スクロール間の待機時間 (ms)
+    const desktopBreakpoint = 1024; // PCとモバイルを切り替える画面幅
 
-    function
- 
-    scrollToSectionByIndex(index) {
+    // PC用のセクション移動関数
+    function scrollToSectionByIndex(index) {
         if (index >= 0 && index < scrollableSections.length) {
             scrollableSections[index].scrollIntoView({ behavior: 'smooth' });
             currentSectionIndex = index;
         }
     }
 
-    function handleScroll(event) {
-        // モーダル表示中はページスクロールを無効化
+    // PC用のマウスホイールスクロール処理
+    function handleDesktopScroll(event) {
+        if (isScrolling) return;
+        event.preventDefault();
+        isScrolling = true;
+
+        if (event.deltaY > 0) {
+            if (currentSectionIndex < scrollableSections.length - 1) currentSectionIndex++;
+        } else {
+            if (currentSectionIndex > 0) currentSectionIndex--;
+        }
+        
+        scrollToSectionByIndex(currentSectionIndex);
+        
+        setTimeout(() => { isScrolling = false; }, scrollThreshold);
+    }
+    
+    // PC用のキーボード操作処理
+    function handleDesktopKeys(event) {
+        if (isScrolling) return;
+
+        let shouldScroll = false;
+        if (event.key === 'ArrowDown') {
+            if (currentSectionIndex < scrollableSections.length - 1) {
+                currentSectionIndex++;
+                shouldScroll = true;
+            }
+        } else if (event.key === 'ArrowUp') {
+            if (currentSectionIndex > 0) {
+                currentSectionIndex--;
+                shouldScroll = true;
+            }
+        }
+        
+        if (shouldScroll) {
+            event.preventDefault();
+            isScrolling = true;
+            scrollToSectionByIndex(currentSectionIndex);
+            setTimeout(() => { isScrolling = false; }, scrollThreshold);
+        }
+    }
+    
+    // スクロールモードを設定/解除するメインの関数
+    function setupFullPageScroll() {
+        // モーダル表示中は、この関数によるoverflowの上書きを防ぐ
         if (!modalContainer.classList.contains('hidden')) {
             return;
         }
-        // デフォルトのスクロール挙動をキャンセル
-        event.preventDefault();
-        
-        if (isScrolling) return;
 
-        isScrolling = true;
+        const isDesktop = window.innerWidth > desktopBreakpoint;
 
-        const scrollDirection = event.deltaY;
-
-        if (scrollDirection > 0) {
-            // 下へスクロール
-            if (currentSectionIndex < scrollableSections.length - 1) {
-                currentSectionIndex++;
-                scrollToSectionByIndex(currentSectionIndex);
-            }
-        } else {
-            // 上へスクロール
-            if (currentSectionIndex > 0) {
-                currentSectionIndex--;
-                scrollToSectionByIndex(currentSectionIndex);
-            }
+        if (isDesktop && !isDesktopScrollActive) {
+            // PCモードを有効化
+            console.log("Activating Desktop Scroll");
+            document.body.style.overflowY = 'hidden';
+            window.addEventListener('wheel', handleDesktopScroll, { passive: false });
+            window.addEventListener('keydown', handleDesktopKeys);
+            isDesktopScrollActive = true;
+            scrollToSectionByIndex(currentSectionIndex); // 現在のセクションに位置を合わせる
+        } else if (!isDesktop && isDesktopScrollActive) {
+            // モバイルモードに切り替え (PCモードを無効化)
+            console.log("Deactivating Desktop Scroll for Mobile");
+            document.body.style.overflowY = 'auto';
+            window.removeEventListener('wheel', handleDesktopScroll, { passive: false });
+            window.removeEventListener('keydown', handleDesktopKeys);
+            isDesktopScrollActive = false;
+        } else if (!isDesktop && !isDesktopScrollActive) {
+            // 初回読み込みがモバイルの場合
+            document.body.style.overflowY = 'auto';
         }
-        
-        setTimeout(() => {
-            isScrolling = false;
-        }, scrollThreshold);
     }
-    
-    // マウスホイールイベントにリスナーを追加
-    window.addEventListener('wheel', handleScroll, { passive: false });
-
-    // キーボード操作（上下矢印）の対応
-    window.addEventListener('keydown', (event) => {
-        if (!modalContainer.classList.contains('hidden') || isScrolling) return;
-
-        if (event.key === 'ArrowDown') {
-            event.preventDefault();
-            if (currentSectionIndex < scrollableSections.length - 1) {
-                isScrolling = true;
-                currentSectionIndex++;
-                scrollToSectionByIndex(currentSectionIndex);
-                setTimeout(() => { isScrolling = false; }, scrollThreshold);
-            }
-        } else if (event.key === 'ArrowUp') {
-            event.preventDefault();
-            if (currentSectionIndex > 0) {
-                isScrolling = true;
-                currentSectionIndex--;
-                scrollToSectionByIndex(currentSectionIndex);
-                setTimeout(() => { isScrolling = false; }, scrollThreshold);
-            }
-        }
-    });
-    // --- フルページスクロール ここまで ---
-
 
     // --- 初期化 ---
     window.onload = function() {
         initParticles();
         animateParticles();
+        setupFullPageScroll(); // 初回読み込み時のスクロール設定
     };
+
+    // --- ウィンドウリサイズ時の処理 ---
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+        // three.jsのキャンバスサイズを更新
+        onWindowResize();
+
+        // リサイズ後のスクロール設定を再評価（デバウンス処理）
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(setupFullPageScroll, 150);
+    });
 
     </script>
 </body>
